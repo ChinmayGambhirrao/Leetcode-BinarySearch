@@ -9,7 +9,12 @@ var topKFrequent = function(nums, k) {
         frequencyMap[num] = (frequencyMap[num] || 0) + 1;
     }
 
-    const sorted = Object.entries(frequencyMap).sort((a, b) => b[1] - a[1]);
+    const heap = new PriorityQueue((a, b) => a[1] - b[1]); // min heap
+    for(const [num, freq] of Object.entries(frequencyMap)) {
+        heap.push([num, freq]);
 
-    return sorted.slice(0,k).map(entry => parseInt(entry[0]));
+        if(heap.size() > k) heap.pop();
+    }
+
+    return heap.toArray().map(entry => parseInt(entry[0]));
 };
